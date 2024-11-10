@@ -10,8 +10,8 @@ pipeline {
         
         stage('Clone Repository') {
             steps {
-                // Clone the repository
-                git 'https://github.com/Prithviraj2003/portfolio-server.git' // Update with your repository
+                // Clone the repository and specify the main branch
+                git branch: 'main', url: 'https://github.com/Prithviraj2003/portfolio-server.git'
             }
         }
         
