@@ -35,8 +35,9 @@ pipeline {
                             # Pull latest changes
                             git pull origin main
                             
+
                             # Install dependencies
-                            pnpm install
+                            npm install
                             
                             # Restart the application (assuming you use PM2 or another process manager)
                             pm2 restart portfolio-server || pm2 start server.js --name "portfolio-server"
