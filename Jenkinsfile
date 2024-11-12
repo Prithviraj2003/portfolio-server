@@ -22,7 +22,7 @@ pipeline {
                     withCredentials([sshUserPrivateKey(credentialsId: 'EC2_SSH_KEY', keyFileVariable: 'SSH_KEY_FILE')]) {
                         // SSH into EC2 instance and deploy the application
                         sh """
-                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY_FILE $EC2_USER@$EC2_INSTANCE_IP << 'EOF'
+                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY_FILE $EC2_USER@$EC2_INSTANCE_IP << EOF
                             # Exit if any command fails
                             set -e
                             
