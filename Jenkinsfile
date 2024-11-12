@@ -25,6 +25,7 @@ pipeline {
                         // SSH into EC2 instance and deploy the application
                         sh """
                         ssh -o StrictHostKeyChecking=no -i $SSH_KEY_FILE $EC2_USER@$EC2_INSTANCE_IP << EOF
+                            ls
                             cd portfolio-server || mkdir -p portfolio-server && cd portfolio-server
                             
                             # Pull latest changes
