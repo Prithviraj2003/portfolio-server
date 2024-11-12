@@ -32,9 +32,11 @@ pipeline {
                             fi
                             cd portfolio-server
 
-                            chmod +x script.sh
-                            ./script.sh
+                            # Pull latest changes
+                            git pull origin main
 
+                            # Install dependencies
+                            npm install
                             
                         EOF
                         """
