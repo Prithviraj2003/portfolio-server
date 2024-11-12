@@ -37,8 +37,7 @@ pipeline {
 
                             # Install dependencies
                             npm install
-                            
-                        EOF
+                          
                         """
                     }
                 }
