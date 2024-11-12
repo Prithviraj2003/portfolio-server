@@ -35,6 +35,8 @@ pipeline {
                             # Pull latest changes
                             git pull origin main
                             
+                            npm -v
+
                             # Install dependencies
                             npm install
                             
