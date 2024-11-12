@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        EC2_INSTANCE_IP = 'ec2-3-110-107-83.ap-south-1.compute.amazonaws.com' // Replace with your EC2 instance IP
+        EC2_INSTANCE_IP = 'ec2-15-206-212-104.ap-south-1.compute.amazonaws.com' // Replace with your EC2 instance IP
         EC2_USER = 'ubuntu' // Replace with the appropriate username (e.g., 'ubuntu' for Ubuntu AMIs)
         SSH_KEY = credentials('EC2_SSH_KEY') // Use the credential ID of your SSH private key stored in Jenkins
     }
@@ -16,16 +16,7 @@ pipeline {
             }
         }
         
-        stage('Install Dependencies') {
-            steps {
-                script {
-                    if (fileExists('package.json')) {
-                        // Install frontend/backend dependencies
-                        sh 'npm install'
-                    }
-                }
-            }
-        }
+
         
         stage('Deploy to EC2') {
             steps {
