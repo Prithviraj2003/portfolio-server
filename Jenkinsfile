@@ -2,8 +2,9 @@ pipeline {
     agent any
     
     environment {
-        HEROKU_APP_NAME = 'prithviraj-portfolio-server' // Replace with your Heroku app name
-        HEROKU_API_KEY = credentials('HEROKU_API_KEY') // Use the credential ID created in Jenkins
+        EC2_INSTANCE_IP = 'ec2-3-110-107-83.ap-south-1.compute.amazonaws.com' // Replace with your EC2 instance IP
+        EC2_USER = 'ubuntu' // Replace with the appropriate username (e.g., 'ubuntu' for Ubuntu AMIs)
+        SSH_KEY = credentials('EC2_SSH_KEY') // Use the credential ID of your SSH private key stored in Jenkins
     }
     
     stages {
@@ -26,17 +27,25 @@ pipeline {
             }
         }
         
-        stage('Deploy to Heroku') {
+        stage('Deploy to EC2') {
             steps {
                 script {
-                    withCredentials([string(credentialsId: 'HEROKU_API_KEY', variable: 'HEROKU_API_KEY')]) {
-                        sh '''
-                        # Login to Heroku
-                        echo $HEROKU_API_KEY | heroku auth:token --app $HEROKU_APP_NAME
-                        
-                        # Deploy to Heroku
-                        git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git HEAD:main
-                        '''
+                    withCredentials([sshUserPrivateKey(credentialsId: 'EC2_SSH_KEY', keyFileVariable: 'SSH_KEY_FILE')]) {
+                        // SSH into EC2 instance and deploy the application
+                        sh """
+                        ssh -o StrictHostKeyChecking=no -i $SSH_KEY_FILE $EC2_USER@$EC2_INSTANCE_IP << EOF
+                            cd portfolio-server || mkdir -p portfolio-server && cd portfolio-server
+                            
+                            # Pull latest changes
+                            git pull origin main
+                            
+                            # Install dependencies
+                            npm install
+                            
+                            # Restart the application (assuming you use PM2 or another process manager)
+                            pm2 restart app || pm2 start server.js --name "portfolio-server"
+                        EOF
+                        """
                     }
                 }
             }
@@ -45,10 +54,10 @@ pipeline {
     
     post {
         success {
-            echo 'Deployment to Heroku succeeded!'
+            echo 'Deployment to EC2 succeeded!'
         }
         failure {
-            echo 'Deployment to Heroku failed.'
+            echo 'Deployment to EC2 failed.'
         }
     }
 }

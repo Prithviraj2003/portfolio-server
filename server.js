@@ -18,6 +18,7 @@ mongoose
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("Could not connect to MongoDB", err));
 
+console.log("New deployment");
 app.get("/api/profile", async (req, res) => {
   const profile = await Profile.find();
   res.send(profile[0]);
