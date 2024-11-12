@@ -32,15 +32,10 @@ pipeline {
                             fi
                             cd portfolio-server
 
-                            # Pull latest changes
-                            git pull origin main
-                            
+                            chmod +x script.sh
+                            ./script.sh
 
-                            # Install dependencies
-                            npm install
                             
-                            # Restart the application (assuming you use PM2 or another process manager)
-                            pm2 restart portfolio-server || pm2 start server.js --name "portfolio-server"
                         EOF
                         """
                     }
